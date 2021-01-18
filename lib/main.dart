@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_practice/Rabbit.dart';
+import 'package:flutter_practice/Stateless_Sample_Widget.dart';
 
 // 앱 시작 부분
 void main() {
@@ -16,7 +18,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: StatelessSampleWidget(
+        title: "Stateless Sample Widget",
+        rabbit: Rabbit(name:"만렙토끼", state:RabbitState.SLEEP)
+      ),
     );
   }
 }
