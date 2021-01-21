@@ -17,9 +17,8 @@ class StatelessSampleWidget extends StatelessWidget {
       appBar: AppBar(title: Text(_title)),
       body: Container(
         child: Center(
-            child: Text(
-          _rabbit.name + "/" + _rabbit.rabbitState.toString(),
-          style: TextStyle(fontSize: 20)
+            child: Text(_rabbit.name + "/" + _rabbit.rabbitState.toString(),
+          style: TextStyle(fontSize: 20),
         )),
       ),
     );
