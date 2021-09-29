@@ -1,78 +1,74 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_practice/Rabbit.dart';
-import 'package:flutter_practice/Stateless_Sample_Widget.dart';
+// import 'dart:html';
 
-// 앱 시작 부분
+import 'package:flutter/material.dart';
+import 'package:flutter_practice/cupertino_page.dart';
+
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
-// 시작 클래스. 머티리얼 디자인 앱 생성
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    print("Hello My Name is Victor");
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: StatelessSampleWidget(
-        title: "Stateless Sample Widget",
-        rabbit: Rabbit(name:"만렙토끼", state:RabbitState.SLEEP)
-      ),
+      home: HelloPage("Hello World", key: Key("HelloPage")),
+      // home: CupertinoPage(),
     );
   }
 }
 
-// 시작 클래스가 실제로 표시하는 클래스. 카운터 앱 화면
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
+class HelloPage extends StatefulWidget {
   final String title;
 
+  const HelloPage(this.title, {Key? key}) : super(key: key);
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HelloPageState createState() => _HelloPageState();
 }
 
-// 위 MyHomePage 클래스의 상태를 나타내는 State클래스
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0; // 화면에 표시할 상태값인 카운터 숫저
+class _HelloPageState extends State<HelloPage> {
+  String _message = 'Hello World2';
+  int _counter = 0;
 
-  // counter 변수를 1 증가시키고 화면을 다시 그리는 메서드
-  void _incrementCounter() {
-    setState(() { // 화면을 다시 그리는 메서
-      _counter++;
-    });
-  }
-
-  // 화면에 UI를 그리는 메서드. 그려질 위젯을 반환
   @override
   Widget build(BuildContext context) {
-    return Scaffold(  // 머테리얼 디자인 기본 뼈대 위젯
-      appBar: AppBar( // 상단 앱바
-        title: Text(widget.title),
-      ),
-      body: Center( // 표시할 내용
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter', // _counter 변수를 표시
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+    return Scaffold(
+        floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add), onPressed: _changeMessage),
+        appBar: AppBar(
+          title: Text(widget.title),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter, // 클릭 시 _incrementCounter() 메서드 실행
-        tooltip: 'Increment',
-        child: Icon(Icons.add), // 상단 앱바
-      ),
-    );
+        body: Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(_message, style: TextStyle(fontSize: 30)),
+            Text('$_counter', style: TextStyle(fontSize: 30)),
+            ElevatedButton(
+                child: Text('화면 이동'),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              CupertinoPage(key: Key("CupertinoPage"))));
+                })
+          ],
+        )));
+  }
+
+  void _changeMessage() {
+    setState(() {
+      _message = "Hello World";
+      _counter++;
+    });
   }
 }
