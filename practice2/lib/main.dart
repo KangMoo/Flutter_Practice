@@ -7,16 +7,30 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Welcome to Flutter',
+        title: 'Startup Name Generator',
+        theme: ThemeData(
+          // Define the default brightness and colors.
+          brightness: Brightness.dark,
+          primaryColor: Colors.lightBlue[800],
+
+          // Define the default font family.
+          fontFamily: 'Georgia',
+
+          // Define the default `TextTheme`. Use this to specify the default
+          // text styling for headlines, titles, bodies of text, and more.
+          textTheme: const TextTheme(
+            headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+            headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+            bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+          ),
+        ),
         home: Scaffold(
             appBar: AppBar(
-              title: const Text('Welcome to Flutter2'),
+              title: Text('Saved Suggestions'),
             ),
-            body: Center(
-              // child: const Text('Hello World'),
-              // child: Text(wordPair.asPascalCase),
-              child: RandomWords(),
-            )));
+            body: Text("???"))
+        // home: RandomWords(),
+        );
   }
 }
 
@@ -34,7 +48,7 @@ class _RandomWordsState extends State<RandomWords> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('무한 리스트'),
+        title: Text('Startup Name Generator'),
         actions: [
           IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
         ],
@@ -92,6 +106,7 @@ class _RandomWordsState extends State<RandomWords> {
           style: _biggerFont,
         ));
       });
+
       final divided =
           ListTile.divideTiles(context: context, tiles: tiles).toList();
 
