@@ -24,12 +24,7 @@ class MyApp extends StatelessWidget {
             bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
           ),
         ),
-        home: Scaffold(
-            appBar: AppBar(
-              title: Text('Saved Suggestions'),
-            ),
-            body: Text("???"))
-        // home: RandomWords(),
+        home: RandomWords(),
         );
   }
 }
