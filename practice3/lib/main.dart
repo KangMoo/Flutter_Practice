@@ -31,9 +31,14 @@ class Grade extends StatelessWidget {
             Center(
               child: CircleAvatar(
                 backgroundImage: AssetImage('assets/1.gif'),
-                radius : 60,
+                radius: 60,
               ),
             ),
+            Divider(
+                height: 60,
+                color: Colors.grey[850],
+                thickness: 0.5,
+                endIndent: 30),
             Text(
               'Name',
               style: TextStyle(
@@ -108,6 +113,12 @@ class Grade extends StatelessWidget {
                     style: TextStyle(fontSize: 16, letterSpacing: 1.0))
               ],
             ),
+            Center(
+              child: CircleAvatar(
+                backgroundImage: AssetImage('assets/2.jpg'),
+                radius:50
+              )
+            )
           ],
         ),
       ),
