@@ -6,6 +6,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'BBANTO',
       home: Grade(),
     );
@@ -116,7 +117,8 @@ class Grade extends StatelessWidget {
             Center(
               child: CircleAvatar(
                 backgroundImage: AssetImage('assets/2.jpg'),
-                radius:50
+                radius:50,
+                backgroundColor: Colors.amber[800]
               )
             )
           ],
