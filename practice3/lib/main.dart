@@ -24,29 +24,86 @@ class Grade extends StatelessWidget {
         elevation: 0,
       ),
       body: Padding(
-          padding: EdgeInsets.fromLTRB(30, 40, 0, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-            Text('Name',
-                style: TextStyle(
-                  color: Colors.white,
-                  letterSpacing: 2,
-                ),
+        padding: EdgeInsets.fromLTRB(30, 40, 0, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Name',
+              style: TextStyle(
+                color: Colors.white,
+                letterSpacing: 2,
+              ),
             ),
             SizedBox(
-              height: 20,
+              height: 10,
             ),
-            Text('BBANTO',
-            style: TextStyle(
-              color: Colors.white,
-              letterSpacing:  2,
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
+            Text(
+              'BBANTO',
+              style: TextStyle(
+                color: Colors.white,
+                letterSpacing: 2,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
             ),
+            SizedBox(
+              height: 30,
+            ),
+            Text(
+              'BBANTO Power Level',
+              style: TextStyle(
+                color: Colors.white,
+                letterSpacing: 2,
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              '14',
+              style: TextStyle(
+                color: Colors.white,
+                letterSpacing: 2,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Row(
+              children: <Widget>[
+                Icon(Icons.check_circle_outline),
+                SizedBox(
+                  width: 10,
+                ),
+                Text('face here tattoo',
+                    style: TextStyle(fontSize: 16, letterSpacing: 1.0))
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Icon(Icons.check_circle_outline),
+                SizedBox(
+                  width: 10,
+                ),
+                Text('using lightsaber',
+                    style: TextStyle(fontSize: 16, letterSpacing: 1.0))
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                Icon(Icons.check_circle_outline),
+                SizedBox(
+                  width: 10,
+                ),
+                Text('fire flames',
+                    style: TextStyle(fontSize: 16, letterSpacing: 1.0))
+              ],
             ),
           ],
-          ),
+        ),
       ),
     );
   }
