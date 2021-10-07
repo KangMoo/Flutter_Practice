@@ -115,12 +115,10 @@ class Grade extends StatelessWidget {
               ],
             ),
             Center(
-              child: CircleAvatar(
-                backgroundImage: AssetImage('assets/2.jpg'),
-                radius:50,
-                backgroundColor: Colors.amber[800]
-              )
-            )
+                child: CircleAvatar(
+                    backgroundImage: AssetImage('assets/2.jpg'),
+                    radius: 50,
+                    backgroundColor: Colors.amber[800])),
           ],
         ),
       ),
