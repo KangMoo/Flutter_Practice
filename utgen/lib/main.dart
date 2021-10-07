@@ -10,11 +10,11 @@ class Utgen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'UTGen',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePageWidget(key: Key("HelloPage")),
+      home: HomePageWidget(key: Key("HomePageWidget")),
       // home: CupertinoPage(),
     );
   }
@@ -37,21 +37,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
-  void initState() {
-    super.initState();
-    textController1 = TextEditingController();
-    textController2 = TextEditingController();
-    textController3 = TextEditingController(text: '6060');
-    textController4 = TextEditingController();
-    textController5 = TextEditingController();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        // backgroundColor: Colors.red,
         automaticallyImplyLeading: true,
         actions: [],
         centerTitle: true,
@@ -65,8 +55,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           child: Column(
             children: [
               TabBar(
-                labelColor: Colors.red,
-                indicatorColor: Colors.redAccent,
+                labelColor: Colors.black,
+                indicatorColor: Colors.black38,
                 tabs: [
                   Tab(
                     text: 'Settings',
