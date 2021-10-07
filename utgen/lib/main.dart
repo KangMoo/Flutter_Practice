@@ -162,7 +162,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 controller: textController3,
                                 obscureText: false,
                                 decoration: InputDecoration(
-                                  labelText: 'RTP Port',
+                                  labelText: 'SIP Port',
                                   // labelStyle:
                                   //     FlutterFlowTheme.bodyText1.override(
                                   //   fontFamily: 'Poppins',
@@ -240,7 +240,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                 controller: textController5,
                                 obscureText: false,
                                 decoration: InputDecoration(
-                                  labelText: 'SIP Port',
+                                  labelText: 'RTP Port',
                                   // labelStyle:
                                   //     FlutterFlowTheme.bodyText1.override(
                                   //   fontFamily: 'Poppins',
