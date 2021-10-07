@@ -1,5 +1,5 @@
-name: practice3
-description: A new Flutter application.
+name: practice5
+description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -62,7 +62,6 @@ flutter:
     - assets/01.png
     - assets/02.png
     - assets/03.png
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

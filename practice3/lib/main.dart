@@ -30,10 +30,15 @@ class Grade extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Center(
-              child: CircleAvatar(
-                backgroundImage: AssetImage('assets/1.gif'),
-                radius: 60,
+              child: ClipOval(
+                child: Image.asset(
+                  ('assets/01.png'),
+                ),
               ),
+              // child: CircleAvatar(
+              //   backgroundImage: AssetImage('assets/01.png'),
+              //   radius: 60,
+              // ),
             ),
             Divider(
                 height: 60,
@@ -116,7 +121,7 @@ class Grade extends StatelessWidget {
             ),
             Center(
                 child: CircleAvatar(
-                    backgroundImage: AssetImage('assets/2.jpg'),
+                    backgroundImage: AssetImage('assets/02.png'),
                     radius: 50,
                     backgroundColor: Colors.amber[800])),
           ],
