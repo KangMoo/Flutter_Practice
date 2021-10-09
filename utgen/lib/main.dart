@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'sipconfig.dart';
 
 void main() => runApp(Utgen());
 
@@ -69,167 +70,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               Expanded(
                 child: TabBarView(
                   children: [
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Text(
-                            'SIP Config',
-                          ),
-                          TextFormField(
-                            controller: textController1,
-                            obscureText: false,
-                            decoration: InputDecoration(
-                              labelText: 'Scenario File Path',
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
-                                ),
-                              ),
-                            ),
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return 'Input Scenario File path';
-                              }
-
-                              return null;
-                            },
-                          ),
-                          TextFormField(
-                            controller: textController2,
-                            obscureText: false,
-                            decoration: InputDecoration(
-                              labelText: 'SIP Local IP Address',
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
-                                ),
-                              ),
-                            ),
-                          ),
-                          TextFormField(
-                            controller: textController3,
-                            obscureText: false,
-                            decoration: InputDecoration(
-                              labelText: 'SIP Port',
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
-                                ),
-                              ),
-                            ),
-                            keyboardType: TextInputType.number,
-                          ),
-                          Divider(
-                            thickness: 1,
-                          ),
-                          Text(
-                            'RTP Config',
-                          ),
-                          TextFormField(
-                            controller: textController4,
-                            obscureText: false,
-                            decoration: InputDecoration(
-                              labelText: 'RTP Local IP Address',
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
-                                ),
-                              ),
-                            ),
-                          ),
-                          TextFormField(
-                            controller: textController5,
-                            obscureText: false,
-                            decoration: InputDecoration(
-                              labelText: 'RTP Port',
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.black,
-                                  width: 1,
-                                ),
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(4.0),
-                                  topRight: Radius.circular(4.0),
-                                ),
-                              ),
-                            ),
-                            keyboardType: TextInputType.number,
-                          )
-                        ],
-                      ),
-                    ),
+                    SipConfig(),
+                    // newMethod(),
                     Text(
                       'Tab View 2',
                     )
@@ -239,6 +81,171 @@ class _HomePageWidgetState extends State<HomePageWidget> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Padding newMethod() {
+    return Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Text(
+            'SIP Config',
+          ),
+          Divider(color: Colors.transparent),
+          TextFormField(
+            controller: textController1,
+            obscureText: false,
+            decoration: InputDecoration(
+              labelText: 'Scenario File Path',
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(4.0),
+                  topRight: Radius.circular(4.0),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(4.0),
+                  topRight: Radius.circular(4.0),
+                ),
+              ),
+            ),
+            validator: (val) {
+              if (val == null || val.isEmpty) {
+                return 'Input Scenario File path';
+              }
+
+              return null;
+            },
+          ),
+          Divider(color: Colors.transparent),
+          TextFormField(
+            controller: textController2,
+            obscureText: false,
+            decoration: InputDecoration(
+              labelText: 'SIP Local FAddress',
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(4.0),
+                  topRight: Radius.circular(4.0),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(4.0),
+                  topRight: Radius.circular(4.0),
+                ),
+              ),
+            ),
+          ),
+          Divider(color: Colors.transparent),
+          TextFormField(
+            controller: textController3,
+            obscureText: false,
+            decoration: InputDecoration(
+              labelText: 'SIP Port',
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(4.0),
+                  topRight: Radius.circular(4.0),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(4.0),
+                  topRight: Radius.circular(4.0),
+                ),
+              ),
+            ),
+            keyboardType: TextInputType.number,
+          ),
+          Divider(color: Colors.transparent),
+          Text(
+            'RTP Config',
+          ),
+          TextFormField(
+            controller: textController4,
+            obscureText: false,
+            decoration: InputDecoration(
+              labelText: 'RTP Local IP Address',
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(4.0),
+                  topRight: Radius.circular(4.0),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(4.0),
+                  topRight: Radius.circular(4.0),
+                ),
+              ),
+            ),
+          ),
+          TextFormField(
+            controller: textController5,
+            obscureText: false,
+            decoration: InputDecoration(
+              labelText: 'RTP Port',
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(4.0),
+                  topRight: Radius.circular(4.0),
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.black,
+                  width: 1,
+                ),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(4.0),
+                  topRight: Radius.circular(4.0),
+                ),
+              ),
+            ),
+            keyboardType: TextInputType.number,
+          )
+        ],
       ),
     );
   }
