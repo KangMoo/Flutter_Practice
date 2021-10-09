@@ -74,214 +74,164 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                'SIP Config',
-                                // style: FlutterFlowTheme.bodyText1.override(
-                                //   fontFamily: 'Poppins',
-                                // ),
-                              ),
-                              TextFormField(
-                                controller: textController1,
-                                obscureText: false,
-                                decoration: InputDecoration(
-                                  labelText: 'Scenario File Path',
-                                  // labelStyle:
-                                  //     FlutterFlowTheme.bodyText1.override(
-                                  //   fontFamily: 'Poppins',
-                                  // ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                      width: 1,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(4.0),
-                                      topRight: Radius.circular(4.0),
-                                    ),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                      width: 1,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(4.0),
-                                      topRight: Radius.circular(4.0),
-                                    ),
-                                  ),
+                          Text(
+                            'SIP Config',
+                          ),
+                          TextFormField(
+                            controller: textController1,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              labelText: 'Scenario File Path',
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 1,
                                 ),
-                                // style: FlutterFlowTheme.bodyText1.override(
-                                //   fontFamily: 'Poppins',
-                                // ),
-                                validator: (val) {
-                                  if (val == null || val.isEmpty) {
-                                    return 'Input Scenario File path';
-                                  }
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                            ),
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Input Scenario File path';
+                              }
 
-                                  return null;
-                                },
-                              ),
-                              TextFormField(
-                                controller: textController2,
-                                obscureText: false,
-                                decoration: InputDecoration(
-                                  labelText: 'SIP Local IP Address',
-                                  // labelStyle:
-                                  //     FlutterFlowTheme.bodyText1.override(
-                                  //   fontFamily: 'Poppins',
-                                  // ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                      width: 1,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(4.0),
-                                      topRight: Radius.circular(4.0),
-                                    ),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                      width: 1,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(4.0),
-                                      topRight: Radius.circular(4.0),
-                                    ),
-                                  ),
+                              return null;
+                            },
+                          ),
+                          TextFormField(
+                            controller: textController2,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              labelText: 'SIP Local IP Address',
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 1,
                                 ),
-                                // style: FlutterFlowTheme.bodyText1.override(
-                                //   fontFamily: 'Poppins',
-                                // ),
-                              ),
-                              TextFormField(
-                                controller: textController3,
-                                obscureText: false,
-                                decoration: InputDecoration(
-                                  labelText: 'SIP Port',
-                                  // labelStyle:
-                                  //     FlutterFlowTheme.bodyText1.override(
-                                  //   fontFamily: 'Poppins',
-                                  // ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                      width: 1,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(4.0),
-                                      topRight: Radius.circular(4.0),
-                                    ),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                      width: 1,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(4.0),
-                                      topRight: Radius.circular(4.0),
-                                    ),
-                                  ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
                                 ),
-                                // style: FlutterFlowTheme.bodyText1.override(
-                                //   fontFamily: 'Poppins',
-                                // ),
-                                keyboardType: TextInputType.number,
                               ),
-                              Divider(
-                                thickness: 1,
-                              ),
-                              Text(
-                                'RTP Config',
-                                // style: FlutterFlowTheme.bodyText1.override(
-                                //   fontFamily: 'Poppins',
-                                // ),
-                              ),
-                              TextFormField(
-                                controller: textController4,
-                                obscureText: false,
-                                decoration: InputDecoration(
-                                  labelText: 'RTP Local IP Address',
-                                  // labelStyle:
-                                  //     FlutterFlowTheme.bodyText1.override(
-                                  //   fontFamily: 'Poppins',
-                                  // ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                      width: 1,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(4.0),
-                                      topRight: Radius.circular(4.0),
-                                    ),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                      width: 1,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(4.0),
-                                      topRight: Radius.circular(4.0),
-                                    ),
-                                  ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 1,
                                 ),
-                                // style: FlutterFlowTheme.bodyText1.override(
-                                //   fontFamily: 'Poppins',
-                                // ),
-                              ),
-                              TextFormField(
-                                controller: textController5,
-                                obscureText: false,
-                                decoration: InputDecoration(
-                                  labelText: 'RTP Port',
-                                  // labelStyle:
-                                  //     FlutterFlowTheme.bodyText1.override(
-                                  //   fontFamily: 'Poppins',
-                                  // ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                      width: 1,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(4.0),
-                                      topRight: Radius.circular(4.0),
-                                    ),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                      width: 1,
-                                    ),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(4.0),
-                                      topRight: Radius.circular(4.0),
-                                    ),
-                                  ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
                                 ),
-                                // style: FlutterFlowTheme.bodyText1.override(
-                                //   fontFamily: 'Poppins',
-                                // ),
-                                keyboardType: TextInputType.number,
-                              )
-                            ],
+                              ),
+                            ),
+                          ),
+                          TextFormField(
+                            controller: textController3,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              labelText: 'SIP Port',
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                            ),
+                            keyboardType: TextInputType.number,
+                          ),
+                          Divider(
+                            thickness: 1,
+                          ),
+                          Text(
+                            'RTP Config',
+                          ),
+                          TextFormField(
+                            controller: textController4,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              labelText: 'RTP Local IP Address',
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                          TextFormField(
+                            controller: textController5,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              labelText: 'RTP Port',
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                  width: 1,
+                                ),
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(4.0),
+                                  topRight: Radius.circular(4.0),
+                                ),
+                              ),
+                            ),
+                            keyboardType: TextInputType.number,
                           )
                         ],
                       ),
                     ),
                     Text(
                       'Tab View 2',
-                      // style: FlutterFlowTheme.bodyText1.override(
-                      //   fontFamily: 'Poppins',
-                      //   fontSize: 32,
-                      // ),
                     )
                   ],
                 ),
