@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart';
 
 class Utgen extends StatelessWidget {
   const Utgen({Key? key}) : super(key: key);
@@ -27,21 +28,14 @@ class HomePageWidget extends StatefulWidget {
 class _HomePageWidgetState extends State<HomePageWidget> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final ipExp = RegExp(r'/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\z/');
+  final ipExp = RegExp(r"^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$",
+      caseSensitive: false, multiLine: false);
+  final ipPortExp = RegExp(
+      r"^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}:[0-9]*$",
+      caseSensitive: false,
+      multiLine: false);
+  final numExp = RegExp(r'[0-9]');
   TextEditingController scenarioFilePathController = TextEditingController();
-  TextEditingController targetAddrController = TextEditingController();
-  TextEditingController sipIpController = TextEditingController();
-  TextEditingController sipPortController = TextEditingController(text: '6060');
-  TextEditingController mediaIpController =
-      TextEditingController(text: '127.0.0.1');
-  TextEditingController mediaPortController = TextEditingController(text: '0');
-  TextEditingController minRtpPortController = TextEditingController(text: '0');
-  TextEditingController maxRtpPortController = TextEditingController(text: '0');
-  TextEditingController rtpTimestampGapController =
-      TextEditingController(text: '20');
-  TextEditingController rtpSendIntervalController =
-      TextEditingController(text: '160');
-  TextEditingController rtpBundleController = TextEditingController(text: '1');
 
   @override
   Widget build(BuildContext context) {
@@ -54,215 +48,124 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          if (scenarioFilePathController.text.isEmpty) {
+          if (formKey.currentState!.validate()) {
+            formKey.currentState!.save();
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Scenario File is not selected')),
+              const SnackBar(content: Text('Running UTGen...')),
             );
-            return;
-          } else if (targetAddrController.text.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Invalid Target Address input')),
-            );
-            return;
           }
-          print('tttt');
         },
         child: const Icon(Icons.arrow_forward_ios),
         elevation: 8,
       ),
       backgroundColor: const Color(0xFFF5F5F5),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-              child: Column(mainAxisSize: MainAxisSize.max, children: [
-                const Text(
-                  'UTGen Runner',
-                ),
-                const Divider(color: Colors.transparent),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: scenarioFilePathController,
-                        obscureText: false,
-                        focusNode: FocusNode(),
-                        enabled: false,
-                        enableInteractiveSelection: false,
-                        decoration: const InputDecoration(
-                          labelText: "Scenario File Path\n",
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(4.0),
-                              topRight: Radius.circular(4.0),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.black,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(4.0),
-                              topRight: Radius.circular(4.0),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Form(
+            key: this.formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Column(mainAxisSize: MainAxisSize.max, children: [
+                  const Text(
+                    'UTGen Runner',
+                  ),
+                  const Divider(color: Colors.transparent),
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: scenarioFilePathController,
+                          enabled: false,
+                          validator: (val) {
+                            if (val == null || val.isEmpty) {
+                              return 'Scenario File is not selected';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            icon: Icon(Icons.star),
+                            labelText: "Scenario File Path\n",
+                            errorStyle: TextStyle(
+                              color: Theme.of(context)
+                                  .errorColor, // or any other color
                             ),
                           ),
                         ),
-                        validator: (val) {
-                          if (val != null && val.isEmpty) {
-                            return 'Input Scenario File path';
-                          }
-                          return null;
-                        },
                       ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          FilePickerResult? result =
-                              await FilePicker.platform.pickFiles();
-                          if (result != null) {
-                            PlatformFile file = result.files.first;
-                            scenarioFilePathController.text = file.path!;
-                          } else {
-                            // User canceled the picker
-                          }
-                        },
-                        child: const Text('Search File'),
-                      ),
-                    )
-                  ],
-                ),
-                const Divider(color: Colors.transparent),
-                defaultTextFieldForm(
-                    labelText: 'SIP Target Address',
-                    controller: targetAddrController),
-                const Divider(color: Colors.transparent),
-              ]),
-            ),
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
+                      Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles();
+                            if (result != null) {
+                              PlatformFile file = result.files.first;
+                              scenarioFilePathController.text = file.path!;
+                              print('TTTT $file.path');
+                            } else {
+                              // User canceled the picker
+                            }
+                          },
+                          child: const Text('Search File'),
+                        ),
+                      )
+                    ],
+                  ),
+                  const Divider(color: Colors.transparent),
+                  defaultTextFieldForm(
+                      label: 'Target IP',
+                      validator: _validateIp,
+                      isMandatory: true),
+                  defaultTextFieldForm(
+                      label: 'Target Port',
+                      keyboardType: TextInputType.number,
+                      isMandatory: true,
+                      validator: _validatePort),
                   const Text(
                     'SIP Config',
                   ),
-                  TextFormField(
-                    controller: sipIpController,
-                    autofocus: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Input IP';
-                      }
-                      if (!ipExp.hasMatch(value)) {
-                        return 'Wrong IP';
-                      }
-                      return '??';
-                    },
-                    onChanged: (value) {
-                      if (value == null || value.isEmpty) {
-                        print("TTTT1");
-                        return;
-                      }
-                      if (!ipExp.hasMatch(value)) {
-                        print("TTTT2");
-                        return;
-                      }
-                      print("TTTT3");
-                    },
-                    decoration: const InputDecoration(
-                      labelText: "SIP IP1",
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.black,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(4.0),
-                          topRight: Radius.circular(4.0),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.black,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(4.0),
-                          topRight: Radius.circular(4.0),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Divider(color: Colors.transparent),
+                  defaultTextFieldForm(label: 'SIP IP'),
                   defaultTextFieldForm(
-                      labelText: 'SIP IP', controller: sipIpController),
-                  const Divider(color: Colors.transparent),
-                  defaultTextFieldForm(
-                      labelText: 'SIP Port',
-                      controller: sipPortController,
-                      keyboardType: TextInputType.number),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
+                      label: 'SIP Port', keyboardType: TextInputType.number),
                   const Text(
                     'RTP Config',
                   ),
-                  const Divider(color: Colors.transparent),
                   defaultTextFieldForm(
-                    labelText: 'Media IP',
-                    controller: mediaIpController,
+                    label: 'Media IP',
                   ),
-                  const Divider(color: Colors.transparent),
                   defaultTextFieldForm(
-                      labelText: 'Media Port',
-                      controller: mediaPortController,
-                      keyboardType: TextInputType.number),
-                  const Divider(color: Colors.transparent),
+                      label: 'Media Port',
+                      keyboardType: TextInputType.number,
+                      initalValue: '0'),
                   defaultTextFieldForm(
-                      labelText: 'Minimum RTP Port',
-                      controller: minRtpPortController,
-                      keyboardType: TextInputType.number),
-                  const Divider(color: Colors.transparent),
+                      label: 'Minimum RTP Port',
+                      keyboardType: TextInputType.number,
+                      initalValue: '0'),
                   defaultTextFieldForm(
-                      labelText: 'Maximum RTP Port',
-                      controller: maxRtpPortController,
-                      keyboardType: TextInputType.number),
-                  const Divider(color: Colors.transparent),
+                      label: 'Maximum RTP Port',
+                      keyboardType: TextInputType.number,
+                      initalValue: '0'),
                   defaultTextFieldForm(
-                      labelText: 'RTP Send Interval',
-                      controller: rtpSendIntervalController,
-                      keyboardType: TextInputType.number),
-                  const Divider(color: Colors.transparent),
+                      label: 'RTP Send Interval',
+                      keyboardType: TextInputType.number,
+                      initalValue: '20'),
                   defaultTextFieldForm(
-                      labelText: 'RTP Timestamp Gap',
-                      controller: rtpTimestampGapController,
-                      keyboardType: TextInputType.number),
-                  const Divider(color: Colors.transparent),
+                      label: 'RTP Timestamp Gap',
+                      keyboardType: TextInputType.number,
+                      initalValue: '160',
+                      validator: (val) {}),
                   defaultTextFieldForm(
-                      labelText: 'RTP Bundle',
-                      controller: rtpBundleController,
-                      keyboardType: TextInputType.number),
-                  const Divider(color: Colors.transparent),
-                ],
-              ),
+                      label: 'RTP Bundle',
+                      keyboardType: TextInputType.number,
+                      initalValue: '1'),
+                ]),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -270,51 +173,47 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   String? _validateIp(String? value) {
     if (!ipExp.hasMatch(value!)) {
-      return value;
+      return 'Wrong IP';
     }
     return null;
   }
 
   String? _validatePort(String? value) {
-    final phoneExp = RegExp(r'^\(\d\d\d\) \d\d\d\-\d\d\d\d$');
-    if (!phoneExp.hasMatch(value!)) {
-      return value;
+    if (!numExp.hasMatch(value!)) {
+      return 'Wrong Port';
     }
     return null;
   }
 
-  TextFormField defaultTextFieldForm({
-    String labelText = '',
-    TextEditingController? controller,
-    TextInputType? keyboardType,
-  }) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: keyboardType,
-      decoration: InputDecoration(
-        labelText: "$labelText\n",
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.black,
-            width: 1,
-          ),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(4.0),
-            topRight: Radius.circular(4.0),
-          ),
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.black,
-            width: 1,
-          ),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(4.0),
-            topRight: Radius.circular(4.0),
-          ),
+  defaultTextFieldForm(
+      {required String label,
+      String? initalValue,
+      FormFieldSetter? onSaved,
+      FormFieldValidator<String>? validator,
+      TextInputType? keyboardType,
+      bool isMandatory = false,
+      List<TextInputFormatter>? inputFormatters}) {
+    return Column(children: [
+      const Divider(
+        color: Colors.transparent,
+      ),
+      TextFormField(
+        initialValue: initalValue,
+        keyboardType: keyboardType,
+        validator: validator,
+        inputFormatters:
+            inputFormatters == null && keyboardType == TextInputType.number
+                ? [FilteringTextInputFormatter.allow(numExp)]
+                : inputFormatters,
+        decoration: InputDecoration(
+          icon: isMandatory ? Icon(Icons.star) : Icon(null),
+          labelText: "$label\n",
         ),
       ),
-    );
+      const Divider(
+        color: Colors.transparent,
+      ),
+    ]);
   }
 
   showAlertDialog(BuildContext context, String title, String message) {
