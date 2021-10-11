@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
+import 'package:process_run/shell.dart';
 
 class Utgen extends StatelessWidget {
   const Utgen({Key? key}) : super(key: key);
@@ -30,10 +31,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final ipExp = RegExp(r"^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$",
       caseSensitive: false, multiLine: false);
-  final ipPortExp = RegExp(
-      r"^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}:[0-9]*$",
-      caseSensitive: false,
-      multiLine: false);
   final numExp = RegExp(r'[0-9]');
   TextEditingController scenarioFilePathController = TextEditingController();
 
@@ -48,6 +45,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          test();
           if (formKey.currentState!.validate()) {
             formKey.currentState!.save();
             ScaffoldMessenger.of(context).showSnackBar(
@@ -78,7 +76,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       Expanded(
                         child: TextFormField(
                           controller: scenarioFilePathController,
-                          enabled: false,
                           validator: (val) {
                             if (val == null || val.isEmpty) {
                               return 'Scenario File is not selected';
@@ -100,17 +97,21 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             const EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                         child: ElevatedButton(
                           onPressed: () async {
-                            FilePickerResult? result =
-                                await FilePicker.platform.pickFiles();
-                            if (result != null) {
-                              PlatformFile file = result.files.first;
-                              scenarioFilePathController.text = file.path!;
-                              print('TTTT $file.path');
-                            } else {
-                              // User canceled the picker
+                            try {
+                              FilePickerResult? result =
+                                  await FilePicker.platform.pickFiles();
+                              if (result != null) {
+                                PlatformFile file = result.files.first;
+                                scenarioFilePathController.text = file.path!;
+                              } else {
+                                // User canceled the picker
+                              }
+                            } catch (e) {
+                              showAlertDialog(
+                                  context, 'Error', 'Fail to load file\n$e');
                             }
                           },
-                          child: const Text('Search File'),
+                          child: const Text('Load'),
                         ),
                       )
                     ],
@@ -241,5 +242,37 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         return alert;
       },
     );
+  }
+
+  Future test() async {
+    // This works on Windows/Linux/Mac
+    print('TTTT');
+    var shell = Shell();
+    print('TTTT2');
+    await shell.run('''
+    echo Hello
+
+# Display some text
+echo Hello
+
+# Display dart version
+dart --version
+
+# Display pub version
+pub --version
+
+  ''');
+    print('TTTT3');
+    shell = shell.pushd('example');
+    print('TTTT4');
+    await shell.run('''
+
+# Listing directory in the example folder
+dir
+
+  ''');
+    print('TTTT5');
+    shell = shell.popd();
+    print('TTTT6');
   }
 }
