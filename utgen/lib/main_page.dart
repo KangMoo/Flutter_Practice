@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
@@ -32,10 +34,29 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   final ipExp = RegExp(r"^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|$)){4}$",
       caseSensitive: false, multiLine: false);
   final numExp = RegExp(r'[0-9]');
+
+  String? javaFile;
+  String? scenarioFile;
+  String? targetSipIp;
+  String? targetSipPort;
+  String? sipIp;
+  String? sipPort;
+  String? mediaIp;
+  String? mediaPort;
+  String? minRtpPort;
+  String? maxRtpPort;
+  String? rtpSendInterval;
+  String? rtpTimestampGap;
+  String? rtpBundle;
+
   TextEditingController scenarioFilePathController = TextEditingController();
+  TextEditingController sipIPController = TextEditingController();
+  TextEditingController mediaIPController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    getIp()
+        .then((value) => mediaIPController.text = sipIPController.text = value);
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -45,12 +66,14 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          test();
+          // test();
           if (formKey.currentState!.validate()) {
             formKey.currentState!.save();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Running UTGen...')),
             );
+            print(
+                'java -jar -sf $scenarioFile $targetSipIp:$targetSipPort -i $sipIp -p $sipPort -mi $mediaIp -mp $mediaPort -min_rtp_port $minRtpPort -max_rtp_port $maxRtpPort -media_timestamp-gap $rtpTimestampGap -media_send_gap $rtpSendInterval -rtp_bundle $rtpBundle');
           }
         },
         child: const Icon(Icons.arrow_forward_ios),
@@ -76,6 +99,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       Expanded(
                         child: TextFormField(
                           controller: scenarioFilePathController,
+                          onSaved: (val) {
+                            scenarioFile = val;
+                          },
                           validator: (val) {
                             if (val == null || val.isEmpty) {
                               return 'Scenario File is not selected';
@@ -118,51 +144,100 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   ),
                   const Divider(color: Colors.transparent),
                   defaultTextFieldForm(
-                      label: 'Target IP',
-                      validator: _validateIp,
-                      isMandatory: true),
+                    label: 'Target IP',
+                    validator: _validateIp,
+                    isMandatory: true,
+                    onSaved: (val) {
+                      targetSipIp = val;
+                    },
+                  ),
                   defaultTextFieldForm(
-                      label: 'Target Port',
-                      keyboardType: TextInputType.number,
-                      isMandatory: true,
-                      validator: _validatePort),
+                    label: 'Target Port',
+                    keyboardType: TextInputType.number,
+                    isMandatory: true,
+                    validator: _validatePort,
+                    onSaved: (val) {
+                      targetSipPort = val;
+                    },
+                  ),
+                  const Divider(
+                    color: Colors.transparent,
+                    height: 50,
+                  ),
                   const Text(
                     'SIP Config',
                   ),
-                  defaultTextFieldForm(label: 'SIP IP'),
                   defaultTextFieldForm(
-                      label: 'SIP Port', keyboardType: TextInputType.number),
+                    label: 'SIP IP',
+                    initalValue: sipIp,
+                    controller: sipIPController,
+                    onSaved: (val) {
+                      sipIp = val;
+                    },
+                  ),
+                  defaultTextFieldForm(
+                    label: 'SIP Port',
+                    keyboardType: TextInputType.number,
+                    initalValue: '5060',
+                    onSaved: (val) {
+                      sipPort = val;
+                    },
+                  ),
                   const Text(
                     'RTP Config',
                   ),
                   defaultTextFieldForm(
                     label: 'Media IP',
+                    controller: mediaIPController,
                   ),
                   defaultTextFieldForm(
-                      label: 'Media Port',
-                      keyboardType: TextInputType.number,
-                      initalValue: '0'),
+                    label: 'Media Port',
+                    keyboardType: TextInputType.number,
+                    initalValue: '0',
+                    onSaved: (val) {
+                      mediaPort = val;
+                    },
+                  ),
                   defaultTextFieldForm(
-                      label: 'Minimum RTP Port',
-                      keyboardType: TextInputType.number,
-                      initalValue: '0'),
+                    label: 'Minimum RTP Port',
+                    keyboardType: TextInputType.number,
+                    initalValue: '0',
+                    onSaved: (val) {
+                      minRtpPort = val;
+                    },
+                  ),
                   defaultTextFieldForm(
-                      label: 'Maximum RTP Port',
-                      keyboardType: TextInputType.number,
-                      initalValue: '0'),
+                    label: 'Maximum RTP Port',
+                    keyboardType: TextInputType.number,
+                    initalValue: '0',
+                    onSaved: (val) {
+                      maxRtpPort = val;
+                    },
+                  ),
                   defaultTextFieldForm(
-                      label: 'RTP Send Interval',
-                      keyboardType: TextInputType.number,
-                      initalValue: '20'),
+                    label: 'RTP Send Interval',
+                    keyboardType: TextInputType.number,
+                    initalValue: '20',
+                    onSaved: (val) {
+                      rtpSendInterval = val;
+                    },
+                  ),
                   defaultTextFieldForm(
-                      label: 'RTP Timestamp Gap',
-                      keyboardType: TextInputType.number,
-                      initalValue: '160',
-                      validator: (val) {}),
+                    label: 'RTP Timestamp Gap',
+                    keyboardType: TextInputType.number,
+                    initalValue: '160',
+                    validator: (val) {
+                      rtpTimestampGap = val;
+                    },
+                  ),
                   defaultTextFieldForm(
-                      label: 'RTP Bundle',
-                      keyboardType: TextInputType.number,
-                      initalValue: '1'),
+                    label: 'RTP Bundle',
+                    keyboardType: TextInputType.number,
+                    initalValue: '1',
+                    onSaved: (val) {
+                      rtpBundle = val;
+                    },
+                  ),
                 ]),
               ],
             ),
@@ -180,6 +255,23 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   }
 
   String? _validatePort(String? value) {
+    try {
+      if (!numExp.hasMatch(value!)) {
+        return 'Wrong Port';
+      } else {
+        var port = int.parse(value);
+        if (1024 < port && port <= 65535) {
+          return null;
+        } else {
+          return 'Wrong Param';
+        }
+      }
+    } catch (e) {
+      return 'Wrong Port';
+    }
+  }
+
+  String? _validateNumber(String? value) {
     if (!numExp.hasMatch(value!)) {
       return 'Wrong Port';
     }
@@ -193,7 +285,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       FormFieldValidator<String>? validator,
       TextInputType? keyboardType,
       bool isMandatory = false,
-      List<TextInputFormatter>? inputFormatters}) {
+      List<TextInputFormatter>? inputFormatters,
+      TextEditingController? controller}) {
     return Column(children: [
       const Divider(
         color: Colors.transparent,
@@ -202,6 +295,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         initialValue: initalValue,
         keyboardType: keyboardType,
         validator: validator,
+        controller: controller,
         inputFormatters:
             inputFormatters == null && keyboardType == TextInputType.number
                 ? [FilteringTextInputFormatter.allow(numExp)]
@@ -246,9 +340,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   Future test() async {
     // This works on Windows/Linux/Mac
-    print('TTTT');
     var shell = Shell();
-    print('TTTT2');
     await shell.run('''
     echo Hello
 
@@ -262,17 +354,17 @@ dart --version
 pub --version
 
   ''');
-    print('TTTT3');
     shell = shell.pushd('example');
-    print('TTTT4');
     await shell.run('''
 
 # Listing directory in the example folder
 dir
 
   ''');
-    print('TTTT5');
     shell = shell.popd();
-    print('TTTT6');
   }
+}
+
+Future<String> getIp() async {
+  return (await NetworkInterface.list())[0].addresses[0].address;
 }
