@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
+import 'package:marquee/marquee.dart';
 import 'package:process_run/shell.dart';
 
 class Utgen extends StatelessWidget {
@@ -52,6 +53,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   TextEditingController scenarioFilePathController = TextEditingController();
   TextEditingController sipIPController = TextEditingController();
   TextEditingController mediaIPController = TextEditingController();
+  TextEditingController testController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -66,15 +68,15 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // test();
-          if (formKey.currentState!.validate()) {
-            formKey.currentState!.save();
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Running UTGen...')),
-            );
-            print(
-                'java -jar -sf $scenarioFile $targetSipIp:$targetSipPort -i $sipIp -p $sipPort -mi $mediaIp -mp $mediaPort -min_rtp_port $minRtpPort -max_rtp_port $maxRtpPort -media_timestamp-gap $rtpTimestampGap -media_send_gap $rtpSendInterval -rtp_bundle $rtpBundle');
-          }
+          test();
+          // if (formKey.currentState!.validate()) {
+          //   formKey.currentState!.save();
+          //   ScaffoldMessenger.of(context).showSnackBar(
+          //     const SnackBar(content: Text('Running UTGen...')),
+          //   );
+          //   print(
+          //       'java -jar -sf $scenarioFile $targetSipIp:$targetSipPort -i $sipIp -p $sipPort -mi $mediaIp -mp $mediaPort -min_rtp_port $minRtpPort -max_rtp_port $maxRtpPort -media_timestamp-gap $rtpTimestampGap -media_send_gap $rtpSendInterval -rtp_bundle $rtpBundle');
+          // }
         },
         child: const Icon(Icons.arrow_forward_ios),
         elevation: 8,
@@ -238,6 +240,20 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       rtpBundle = val;
                     },
                   ),
+                  // Expanded(
+                  //   child: SingleChildScrollView(
+                  //     child: Text(sb.toString()),
+                  //   ),
+                  // ),
+                  TextField(
+                    controller: testController,
+                    maxLines: 30,
+                    // readOnly: true,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Output',
+                    ),
+                  )
                 ]),
               ],
             ),
@@ -340,28 +356,44 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   Future test() async {
     // This works on Windows/Linux/Mac
-    var shell = Shell();
-    await shell.run('''
-    echo Hello
+    var controller = ShellLinesController();
+    var shell = Shell(stdout: controller.sink, verbose: false);
+    controller.stream.listen((event) {
+      this.testController.text += '\n' + event;
+      // Handle output
 
-# Display some text
-echo Hello
+      // ...
+      // If needed kill the shell
+      shell.kill();
+    });
+    try {
+      await shell.run('echo Hello');
+    } on ShellException catch (_) {
+      // We might get a shell exception
+    }
 
-# Display dart version
-dart --version
+//     var shell = Shell();
+//     await shell.run('''
+//     echo Hello
 
-# Display pub version
-pub --version
+// # Display some text
+// echo Hello
 
-  ''');
-    shell = shell.pushd('example');
-    await shell.run('''
+// # Display dart version
+// dart --version
 
-# Listing directory in the example folder
-dir
+// # Display pub version
+// pub --version
 
-  ''');
-    shell = shell.popd();
+//   ''');
+//     shell = shell.pushd('example');
+//     await shell.run('''
+
+// # Listing directory in the example folder
+// dir
+
+//   ''');
+//     shell = shell.popd();
   }
 }
 
