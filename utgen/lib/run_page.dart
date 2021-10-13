@@ -18,15 +18,15 @@ class _RunPageState extends State<RunPage> {
       key: scaffoldKey,
       appBar: AppBar(
         title: const Text('UTGen'),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.navigate_next),
-            tooltip: 'UTGen',
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
+        // actions: <Widget>[
+        //   IconButton(
+        //     icon: const Icon(Icons.navigate_next),
+        //     tooltip: 'UTGen',
+        //     onPressed: () {
+        //       Navigator.pop(context);
+        //     },
+        //   ),
+        // ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
