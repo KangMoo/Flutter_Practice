@@ -3,8 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
-import 'package:marquee/marquee.dart';
-import 'package:process_run/shell.dart';
+import 'package:utgen/run_page.dart';
 
 class Utgen extends StatelessWidget {
   const Utgen({Key? key}) : super(key: key);
@@ -36,7 +35,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       caseSensitive: false, multiLine: false);
   final numExp = RegExp(r'[0-9]');
 
-  String? javaFile;
+  String? javaFile = 'TTTT';
   String? scenarioFile;
   String? targetSipIp;
   String? targetSipPort;
@@ -50,7 +49,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   String? rtpTimestampGap;
   String? rtpBundle;
 
-  TextEditingController scenarioFilePathController = TextEditingController();
+  TextEditingController scenarioFilePathController =
+      TextEditingController(text: 'abcd');
   TextEditingController sipIPController = TextEditingController();
   TextEditingController mediaIPController = TextEditingController();
   TextEditingController testController = TextEditingController();
@@ -68,15 +68,19 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          test();
-          // if (formKey.currentState!.validate()) {
-          //   formKey.currentState!.save();
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //     const SnackBar(content: Text('Running UTGen...')),
-          //   );
-          //   print(
-          //       'java -jar -sf $scenarioFile $targetSipIp:$targetSipPort -i $sipIp -p $sipPort -mi $mediaIp -mp $mediaPort -min_rtp_port $minRtpPort -max_rtp_port $maxRtpPort -media_timestamp-gap $rtpTimestampGap -media_send_gap $rtpSendInterval -rtp_bundle $rtpBundle');
-          // }
+          if (formKey.currentState!.validate()) {
+            formKey.currentState!.save();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Running UTGen...')),
+            );
+            String command =
+                'java -jar $javaFile -sf $scenarioFile $targetSipIp:$targetSipPort -i $sipIp -p $sipPort -mi $mediaIp -mp $mediaPort -min_rtp_port $minRtpPort -max_rtp_port $maxRtpPort -media_timestamp-gap $rtpTimestampGap -media_send_gap $rtpSendInterval -rtp_bundle $rtpBundle';
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        RunPage(key: Key("CupertinoPage"), command: command)));
+          }
         },
         child: const Icon(Icons.arrow_forward_ios),
         elevation: 8,
@@ -147,6 +151,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   const Divider(color: Colors.transparent),
                   defaultTextFieldForm(
                     label: 'Target IP',
+                    initalValue: '127.0.0.1',
                     validator: _validateIp,
                     isMandatory: true,
                     onSaved: (val) {
@@ -155,6 +160,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   ),
                   defaultTextFieldForm(
                     label: 'Target Port',
+                    initalValue: '1234',
                     keyboardType: TextInputType.number,
                     isMandatory: true,
                     validator: _validatePort,
@@ -173,6 +179,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     label: 'SIP IP',
                     initalValue: sipIp,
                     controller: sipIPController,
+                    validator: _validateIp,
                     onSaved: (val) {
                       sipIp = val;
                     },
@@ -181,6 +188,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     label: 'SIP Port',
                     keyboardType: TextInputType.number,
                     initalValue: '5060',
+                    validator: _validatePort,
                     onSaved: (val) {
                       sipPort = val;
                     },
@@ -189,13 +197,17 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     'RTP Config',
                   ),
                   defaultTextFieldForm(
-                    label: 'Media IP',
-                    controller: mediaIPController,
-                  ),
+                      label: 'Media IP',
+                      controller: mediaIPController,
+                      validator: _validateIp,
+                      onSaved: (val) {
+                        mediaIp = val;
+                      }),
                   defaultTextFieldForm(
                     label: 'Media Port',
                     keyboardType: TextInputType.number,
                     initalValue: '0',
+                    validator: _validatePort,
                     onSaved: (val) {
                       mediaPort = val;
                     },
@@ -204,6 +216,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     label: 'Minimum RTP Port',
                     keyboardType: TextInputType.number,
                     initalValue: '0',
+                    validator: _validatePort,
                     onSaved: (val) {
                       minRtpPort = val;
                     },
@@ -212,6 +225,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     label: 'Maximum RTP Port',
                     keyboardType: TextInputType.number,
                     initalValue: '0',
+                    validator: _validatePort,
                     onSaved: (val) {
                       maxRtpPort = val;
                     },
@@ -220,6 +234,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     label: 'RTP Send Interval',
                     keyboardType: TextInputType.number,
                     initalValue: '20',
+                    validator: _validateNumber,
                     onSaved: (val) {
                       rtpSendInterval = val;
                     },
@@ -228,7 +243,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     label: 'RTP Timestamp Gap',
                     keyboardType: TextInputType.number,
                     initalValue: '160',
-                    validator: (val) {
+                    validator: _validateNumber,
+                    onSaved: (val) {
                       rtpTimestampGap = val;
                     },
                   ),
@@ -236,24 +252,11 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     label: 'RTP Bundle',
                     keyboardType: TextInputType.number,
                     initalValue: '1',
+                    validator: _validateNumber,
                     onSaved: (val) {
                       rtpBundle = val;
                     },
                   ),
-                  // Expanded(
-                  //   child: SingleChildScrollView(
-                  //     child: Text(sb.toString()),
-                  //   ),
-                  // ),
-                  TextField(
-                    controller: testController,
-                    maxLines: 30,
-                    // readOnly: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Output',
-                    ),
-                  )
                 ]),
               ],
             ),
@@ -276,7 +279,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         return 'Wrong Port';
       } else {
         var port = int.parse(value);
-        if (1024 < port && port <= 65535) {
+        if (0 <= port && port <= 65535) {
           return null;
         } else {
           return 'Wrong Param';
@@ -312,6 +315,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         keyboardType: keyboardType,
         validator: validator,
         controller: controller,
+        onSaved: onSaved,
         inputFormatters:
             inputFormatters == null && keyboardType == TextInputType.number
                 ? [FilteringTextInputFormatter.allow(numExp)]
@@ -352,48 +356,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         return alert;
       },
     );
-  }
-
-  Future test() async {
-    // This works on Windows/Linux/Mac
-    var controller = ShellLinesController();
-    var shell = Shell(stdout: controller.sink, verbose: false);
-    controller.stream.listen((event) {
-      this.testController.text += '\n' + event;
-      // Handle output
-
-      // ...
-      // If needed kill the shell
-      shell.kill();
-    });
-    try {
-      await shell.run('echo Hello');
-    } on ShellException catch (_) {
-      // We might get a shell exception
-    }
-
-//     var shell = Shell();
-//     await shell.run('''
-//     echo Hello
-
-// # Display some text
-// echo Hello
-
-// # Display dart version
-// dart --version
-
-// # Display pub version
-// pub --version
-
-//   ''');
-//     shell = shell.pushd('example');
-//     await shell.run('''
-
-// # Listing directory in the example folder
-// dir
-
-//   ''');
-//     shell = shell.popd();
   }
 }
 
