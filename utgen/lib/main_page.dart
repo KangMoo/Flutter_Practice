@@ -36,12 +36,16 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       caseSensitive: false, multiLine: false);
   final numExp = RegExp(r'[0-9]');
 
-  String? javaFile = 'TTTT';
+  String? javaFile = '/Users/heokangmoo/temp/utgen-jar-with-dependencies.jar';
   String? scenarioFile;
   String? targetSipIp;
   String? targetSipPort;
+
+  // SIP Options
   String? sipIp;
   String? sipPort;
+
+  // RTP Options
   String? mediaIp;
   String? mediaPort;
   String? minRtpPort;
@@ -49,6 +53,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   String? rtpSendInterval;
   String? rtpTimestampGap;
   String? rtpBundle;
+
+  // Call Rate Options
+  String? rate; // -r
+  String? ratePeriod; // -rp
+  String? limit; // -l
+  String? maxCall; // -m
 
   TextEditingController scenarioFilePathController =
       TextEditingController(text: 'abcd');
@@ -75,7 +85,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               const SnackBar(content: Text('Running UTGen...')),
             );
             String command =
-                'java -jar $javaFile -sf $scenarioFile $targetSipIp:$targetSipPort -i $sipIp -p $sipPort -mi $mediaIp -mp $mediaPort -min_rtp_port $minRtpPort -max_rtp_port $maxRtpPort -media_timestamp-gap $rtpTimestampGap -media_send_gap $rtpSendInterval -rtp_bundle $rtpBundle';
+                'java -jar $javaFile -sf $scenarioFile $targetSipIp:$targetSipPort $sipIp $sipPort $mediaIp $mediaPort $minRtpPort $maxRtpPort $rtpTimestampGap $rtpSendInterval $rtpBundle $rate $ratePeriod $limit $maxCall';
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -182,7 +192,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     controller: sipIPController,
                     validator: _validateIp,
                     onSaved: (val) {
-                      sipIp = val;
+                      sipIp = '-i $val';
                     },
                   ),
                   defaultTextFieldForm(
@@ -191,8 +201,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     initalValue: '5060',
                     validator: _validatePort,
                     onSaved: (val) {
-                      sipPort = val;
+                      sipPort = '-p $val';
                     },
+                  ),
+                  const Divider(
+                    color: Colors.transparent,
+                    height: 50,
                   ),
                   const Text(
                     'RTP Config',
@@ -202,7 +216,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                       controller: mediaIPController,
                       validator: _validateIp,
                       onSaved: (val) {
-                        mediaIp = val;
+                        mediaIp = '-mi $val';
                       }),
                   defaultTextFieldForm(
                     label: 'Media Port',
@@ -210,7 +224,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     initalValue: '0',
                     validator: _validatePort,
                     onSaved: (val) {
-                      mediaPort = val;
+                      mediaPort = '-mp $val';
                     },
                   ),
                   defaultTextFieldForm(
@@ -219,7 +233,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     initalValue: '0',
                     validator: _validatePort,
                     onSaved: (val) {
-                      minRtpPort = val;
+                      minRtpPort = '-min_rtp_port $val';
                     },
                   ),
                   defaultTextFieldForm(
@@ -228,7 +242,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     initalValue: '0',
                     validator: _validatePort,
                     onSaved: (val) {
-                      maxRtpPort = val;
+                      maxRtpPort = '-max_rtp_port $val';
                     },
                   ),
                   defaultTextFieldForm(
@@ -237,7 +251,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     initalValue: '20',
                     validator: _validateNumber,
                     onSaved: (val) {
-                      rtpSendInterval = val;
+                      rtpSendInterval = '-media_send_gap $val';
                     },
                   ),
                   defaultTextFieldForm(
@@ -246,7 +260,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     initalValue: '160',
                     validator: _validateNumber,
                     onSaved: (val) {
-                      rtpTimestampGap = val;
+                      rtpTimestampGap = '-media_timestamp_gap $val';
                     },
                   ),
                   defaultTextFieldForm(
@@ -255,7 +269,54 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     initalValue: '1',
                     validator: _validateNumber,
                     onSaved: (val) {
-                      rtpBundle = val;
+                      rtpBundle = '-rtp_bundle $val';
+                    },
+                  ),
+                  const Divider(
+                    color: Colors.transparent,
+                    height: 50,
+                  ),
+                  const Text(
+                    'Call Config',
+                  ),
+                  defaultTextFieldForm(
+                    label: 'Rate',
+                    keyboardType: TextInputType.number,
+                    initalValue: '10',
+                    validator: _validateNumber,
+                    onSaved: (val) {
+                      rate = '-r $val';
+                    },
+                  ),
+                  defaultTextFieldForm(
+                    label: 'Rate Period',
+                    keyboardType: TextInputType.number,
+                    initalValue: '1000',
+                    validator: _validateNumber,
+                    onSaved: (val) {
+                      ratePeriod = '-rp $val';
+                    },
+                  ),
+                  defaultTextFieldForm(
+                    label: 'Limit',
+                    keyboardType: TextInputType.number,
+                    initalValue: '-1',
+                    validator: _validateNumber,
+                    onSaved: (val) {
+                      if (int.parse(val) <= 0) {
+                        limit = '';
+                      } else {
+                        limit = '-l $val';
+                      }
+                    },
+                  ),
+                  defaultTextFieldForm(
+                    label: 'Max Call',
+                    keyboardType: TextInputType.number,
+                    initalValue: '0',
+                    validator: _validateNumber,
+                    onSaved: (val) {
+                      maxCall = '-m $val';
                     },
                   ),
                 ]),
